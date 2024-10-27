@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
       next: (result: IUser) => {
         if (result) {
           if (this.auth.IsInRole(Role.Administrator.toString())) {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/headCompanies/dash']);
 
           }
 

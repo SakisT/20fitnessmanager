@@ -12,6 +12,10 @@ export class HeadCompaniesService {
   constructor(private readonly http: HttpClient) {}
 
    public getHeadCompany(headCompanyID: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiURL}/headCompanies/${headCompanyID}`);
+    return this.http.get<any>(`${environment.apiURL}headCompanies/${headCompanyID}`);
+  }
+
+  public getHeadCompanies(): Observable<any> {
+    return this.http.get<any>(`${environment.apiURL}headCompanies`);
   }
 }
