@@ -40,3 +40,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+/.vs/ng-gym-sf/FileContentIndex
+/.vs/ng-gym-sf/CopilotIndices/0.2.1657.32929
