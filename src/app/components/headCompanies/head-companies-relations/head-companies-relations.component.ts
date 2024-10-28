@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HeadCompaniesService } from '../../services/head-companies.service';
+import { HeadCompaniesService } from '../../../services/head-companies.service';
+
 
 @Component({
   selector: 'app-head-companies-relations',

@@ -1,0 +1,49 @@
+<div class="p-4 border border-gray-200 rounded shadow-xl">
+
+  <ejs-tab id="mainTab" #mainTab>
+    <e-tabitems>
+      <e-tabitem>
+        <ng-template #headerText>
+          <div>
+            Κινήσεις
+          </div>
+        </ng-template>
+        <ng-template #content>
+          <div class="p-4">
+            <app-records-list></app-records-list>
+          </div>
+
+        </ng-template>
+      </e-tabitem>
+
+      <e-tabitem>
+        <ng-template #headerText>
+          <div>
+            Τύποι εξόδων
+          </div>
+        </ng-template>
+        <ng-template #content>
+          <div class="p-4 w-full">
+            <app-head-expense-types></app-head-expense-types>
+          </div>
+        </ng-template>
+      </e-tabitem>
+
+      <e-tabitem>
+        <ng-template #headerText>
+          <div>
+            Ποσοστά
+          </div>
+        </ng-template>
+        <ng-template #content>
+          <div class="p-4 w-full">
+            <app-head-companies-relations> </app-head-companies-relations>
+          </div>
+
+        </ng-template>
+      </e-tabitem>
+
+    </e-tabitems>
+  </ejs-tab>
+
+</div>

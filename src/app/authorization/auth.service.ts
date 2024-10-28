@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   public IsInRole(role: string | Role): boolean {
-    return this.currentUser.roles.includes(role);
+    return this.currentUser?.roles?.includes(role);
   }
 
   public HasClaim(claimType: string, claimValue: string): boolean {

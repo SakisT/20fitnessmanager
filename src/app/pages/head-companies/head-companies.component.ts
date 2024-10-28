@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HeadCompaniesRelationsComponent } from "../../components/head-companies-relations/head-companies-relations.component";
 import { RouterOutlet } from '@angular/router';
 
 @Component({
