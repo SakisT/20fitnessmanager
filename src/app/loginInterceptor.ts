@@ -12,6 +12,9 @@ export class LoggingInterceptor implements HttpInterceptor {
 
     if (token) {
       req = this.addToken(req, token);
+      console.log('Token added:', token);
+    } else {
+      console.warn('No token found');
     }
     return handler.handle(req);
   }

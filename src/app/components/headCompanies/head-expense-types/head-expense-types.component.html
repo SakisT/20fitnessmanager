@@ -1,1 +1,4 @@
-<p>head-expense-types works!</p>
+<div *ngIf="(expenseTypes$ | async) as expenseTypes">
+
+  <span>{{expenseTypes | json}}</span>
+</div>
