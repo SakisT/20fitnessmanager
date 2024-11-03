@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HeadCompaniesService } from '../../../services/head-companies.service';
 import { AuthService } from '../../../authorization/auth.service';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { IUser } from '../../../models/user';
-import { EditService, GridModule, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
+import { EditService, GridModule, PageService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { Guid } from 'guid-typescript';
 
@@ -14,7 +14,7 @@ import { Guid } from 'guid-typescript';
   imports: [CommonModule, GridModule, ToolbarModule],
   templateUrl: './head-expense-types.component.html',
   styleUrl: './head-expense-types.component.css',
-  providers: [SearchService, ToolbarService, EditService]
+  providers: [SearchService, ToolbarService, EditService, PageService]
 })
 export class HeadExpenseTypesComponent implements OnInit {
   expenseTypesSubject$ = new Subject();
@@ -60,7 +60,20 @@ export class HeadExpenseTypesComponent implements OnInit {
   }
 
   loadExpenseTypes(headCompanyId: string): void {
-    this.service.getHeadExpenseTypes(headCompanyId).subscribe({
+    this.service.getHeadExpenseTypes(headCompanyId).pipe(
+      map((expenseTypes: any) => {
+        // return expensTpes order by name field
+        return expenseTypes.sort((a: any, b: any) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      })
+    ).subscribe({
       next: (expenseTypes: any) => {
         this.expenseTypesSubject$.next(expenseTypes);
       },
