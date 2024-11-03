@@ -50,6 +50,10 @@ export class HeadCompaniesService {
     return this.http.put<any>(`${environment.apiURL}headExpenses/${headID}`, expense);
   }
 
+  public getHeadRelations(headID: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiURL}headRelations/list/${headID}`);
+  }
+
   public getHeadChildCompanyRelations(headID: string): Observable<any> {
     return this.http.get<any>(`${environment.apiURL}headChildCompanyRelations/list/${headID}`);
   }

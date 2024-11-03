@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeadCompaniesService } from '../../../services/head-companies.service';
 import { AuthService } from '../../../authorization/auth.service';
 import { CommonModule } from '@angular/common';
-import { EditService, GridModule, IEditCell, PageService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
+import { EditService, GridModule, PageService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { map, Subject } from 'rxjs';
 import { IUser } from '../../../models/user';
@@ -60,9 +60,6 @@ export class HeadCompaniesRelationsComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-
-
     this.auth.currentUser$.subscribe({
       next: (result: IUser) => {
         this.user = result;
@@ -85,6 +82,7 @@ export class HeadCompaniesRelationsComponent implements OnInit {
     });
 
   }
+
   loadHeadCompany(headID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.service.getHeadCompany(headID).subscribe({
@@ -120,6 +118,7 @@ export class HeadCompaniesRelationsComponent implements OnInit {
       }
     });
   }
+
   addRelation(relationData: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.service.addChildCompanyRelation(relationData).subscribe({
@@ -133,6 +132,7 @@ export class HeadCompaniesRelationsComponent implements OnInit {
 
     });
   }
+
   updateRelation(relationData: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.service.updateChildCompanyRelation(relationData.headChildCompanyRelationID, relationData).subscribe({

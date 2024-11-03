@@ -8,6 +8,7 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { Subject } from 'rxjs';
 import { IUser } from '../../../models/user';
+import { Role } from '../../../models/role';
 
 @Component({
   selector: 'app-records-list',
@@ -48,25 +49,57 @@ export class RecordsListComponent {
     'f43a1135-e4c6-48e4-80b1-9c77d351e88a': 'Τρίκαλα',
     '2610df1b-41a7-4d37-aa9f-a35b4a3498f8': 'Χαλάνδρι'
   };
+  toolBarActions:string[]=[];
   constructor(private readonly service: HeadCompaniesService, private readonly auth:AuthService) { }
 
   ngOnInit(): void {
     this.auth.currentUser$.subscribe({
-      next: (user) => {
-        if (user) {
-          this.service.getHeadCompanies().subscribe({
-            next: (result: any) => {
-              console.log(result);
-
-            },
-            error: (error: any) => {
-              console.log(error);
-            }
-
+      next: (result: IUser) => {
+        this.user = result;
+        if (this.user) {
+          if(this.auth.IsInRole([Role.Administrator])){
+            this.toolBarActions=['Add','Edit','Delete','Update','Cancel','Search'];
+          }else{
+            this.toolBarActions=['Edit','Delete','Update','Cancel','Search'];
+          }
+          const hcid = this.user.claims.filter((c: any) => c.type === 'HCOWNER')[0]?.value;
+          this.loadHeadCompany(hcid).then((headCompany: any) => {
+            this.loadRecords(headCompany.headCompanyID);
           });
         }
+
+      },
+      error: (error: any) => {
+        console.log(error);
       }
     });
 
   }
+
+  loadRecords(headCompanyID: string): void {
+    const incomes$ = this.service.getHeadExpenses(headCompanyID);
+    this.service.getHeadRelations(headCompanyID).subscribe({
+      next: (relations: any) => {
+        this.recordsSubject$.next(relations);
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+  }
+
+  loadHeadCompany(headID: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.service.getHeadCompany(headID).subscribe({
+        next: (headCompany: any) => {
+          this.currentHeadCompany = headCompany;
+          resolve(headCompany);
+        },
+        error: (error: any) => {
+          reject(error);
+        }
+      });
+    });
+  }
+
 }
