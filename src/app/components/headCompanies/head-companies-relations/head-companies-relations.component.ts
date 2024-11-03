@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeadCompaniesService } from '../../../services/head-companies.service';
+import { AuthService } from '../../../authorization/auth.service';
 
 
 @Component({
@@ -10,19 +11,34 @@ import { HeadCompaniesService } from '../../../services/head-companies.service';
   styleUrl: './head-companies-relations.component.css'
 })
 export class HeadCompaniesRelationsComponent implements OnInit {
-
-  constructor(private readonly service:HeadCompaniesService){}
+  // private auth = inject(AuthService);
+  constructor(private readonly service:HeadCompaniesService, private readonly auth:AuthService){}
 
   ngOnInit(): void {
-    this.service.getHeadCompanies().subscribe({
-      next: (result: any) => {
-        console.log(result);
+
+    this.auth.currentUser$.subscribe({
+      next: (user: any) => {
+        if(user){
+          this.service.getHeadCompanies().subscribe({
+            next: (result: any) => {
+              console.log(result);
+            },
+            error: (error: any) => {
+              console.error(error);
+            }
+
+          });
+        }
       },
       error: (error: any) => {
-        console.error(error);
+        console.log(error);
       }
-
     });
+
   }
 
 }
+function inject(AuthService: any) {
+  throw new Error('Function not implemented.');
+}
+

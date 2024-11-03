@@ -11,8 +11,9 @@ import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TextBoxModule, CheckBoxModule, ButtonModule,RouterModule],
-  providers: [AuthService],
+  imports: [CommonModule, ReactiveFormsModule, TextBoxModule, CheckBoxModule, ButtonModule, RouterModule],
+  // Remove the following line
+  // providers: [AuthService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -27,30 +28,17 @@ export class LoginComponent implements OnInit {
       rememberMe: [false]
     });
   }
+
   ngOnInit(): void {
-    // get storedCredentials from local storage IF there are any
-
-    this.auth.currentUser$.subscribe({
-      next: (result: IUser) => {
-        if (result) {
-          if (this.auth.IsInRole(Role.Administrator.toString())) {
-            this.router.navigate(['/headCompanies/dash']);
-
-          }
-
-          // navigate to the home page
-        }
-      }
-    });
     const storedCredentials = this.userFromStorage();
     this.loginForm.patchValue({
       userName: storedCredentials.userName,
       password: storedCredentials.password,
-      rememberMe: (storedCredentials.userName.length > 0)
+      rememberMe: storedCredentials.userName.length > 0
     });
   }
 
-  async login() {
+  login() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -58,16 +46,21 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.value.rememberMe) {
       localStorage.setItem('currentUser', JSON.stringify(this.loginForm.value));
     }
-    await this.auth.login(this.loginForm.value.userName, this.loginForm.value.password);
-    // this.auth.login(this.loginForm.value.userName, this.loginForm.value.password).then((user) => {
-    //   debugger;
-    // });
 
+    this.auth.login(this.loginForm.value.userName, this.loginForm.value.password).then((user) => {
+      this.loginSuccess();
+    });
+  }
+
+  loginSuccess() {
+    if (this.auth.IsInRole(Role.Administrator.toString())) {
+      this.router.navigate(['/headCompanies/dash']);
+    }
   }
 
   userFromStorage(): any {
-    let user = localStorage.getItem('currentUser') || `{"userName":"","password":""}`;
+    const user = localStorage.getItem('currentUser') || `{"userName":"","password":""}`;
     return JSON.parse(user);
   }
-
 }
+

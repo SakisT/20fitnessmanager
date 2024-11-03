@@ -5,7 +5,7 @@ import { DashboardComponent } from './components/headCompanies/dashboard/dashboa
 import { HeadCompaniesRelationsComponent } from './components/headCompanies/head-companies-relations/head-companies-relations.component';
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: '', redirectTo: 'headCompanies/dash', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'headCompanies', component: HeadCompaniesComponent,children:[
     {path:'dash', component: DashboardComponent},

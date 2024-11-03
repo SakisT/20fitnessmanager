@@ -15,7 +15,7 @@ export class AuthService {
 
   _userID: string | null = sessionStorage.getItem('userID');
 
-  private currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.getUser());
+  public currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.getUser());
 
   constructor(private readonly http: HttpClient) { }
 
@@ -67,7 +67,6 @@ export class AuthService {
   }
 
   login(username: string, password: string): Promise<any> {
-
     return new Promise((resolve, reject) => {
       this.http.post<any>(`${environment.apiURL}auth/login`, { email: username, password: password }).pipe(
         switchMap((user) => {
@@ -76,18 +75,39 @@ export class AuthService {
         })
       ).subscribe({
         next: (user) => {
-          this.currentUser = user;
+          console.log('User logged in:', user); // Debug statement
           sessionStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
+          this.currentUser = user;
+
+          // Adding a slight delay to ensure all subscribers are ready
+          setTimeout(() => {
+            this.currentUserSubject.next(user);
+          }, 10);
+
           resolve(user);
         },
         error: (err) => {
           reject(err);
         }
-      })
+      });
     });
+  }
 
 
+
+  async logout(accessToken: string | null): Promise<boolean> {
+    sessionStorage.clear();
+    const credentials = JSON.stringify({ accessToken: accessToken });
+    return await new Promise<boolean>((resolve, reject) => {
+      this.http.post<boolean>(`${environment.apiURL}auth/logout`, credentials, {
+
+      }).subscribe({
+        next: (res: boolean) => resolve(res),
+        error: (ex) => {
+          reject(ex);
+        }
+      });
+    });
   }
 
   tokenExpired(): boolean {

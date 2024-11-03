@@ -10,7 +10,7 @@
     <div class="h-auto"> <!-- bg-violet-300 -->
       <!-- Content for the top section -->
        <div class="flex flex-row justify-center">
-        <ejs-menu [items]="menuItems"></ejs-menu>
+        <ejs-menu [items]="menuItems"  (select)="onClick($event)"></ejs-menu>
        </div>
     </div>
 
