@@ -51,19 +51,19 @@ export class HeadCompaniesService {
   }
 
   public getHeadChildCompanyRelations(headID: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiURL}HeadChildCompanyRelations/list/${headID}`);
+    return this.http.get<any>(`${environment.apiURL}headChildCompanyRelations/list/${headID}`);
   }
 
-  public addChildCompanyRelation(headID: string, relation: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiURL}HeadChildCompanyRelations/${headID}`, relation);
+  public addChildCompanyRelation(relation: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiURL}headChildCompanyRelations`, relation);
   }
 
   public deleteChildCompanyRelation(headID: string, relationID: string): Observable<any> {
-    return this.http.delete<any>(`${environment.apiURL}HeadChildCompanyRelations/${headID}/${relationID}`);
+    return this.http.delete<any>(`${environment.apiURL}headChildCompanyRelations/${headID}/${relationID}`);
   }
 
   public updateChildCompanyRelation(headID: string, relation: any): Observable<any> {
-    return this.http.put<any>(`${environment.apiURL}HeadChildCompanyRelations/${headID}`, relation);
+    return this.http.put<any>(`${environment.apiURL}headChildCompanyRelations/${headID}`, relation);
   }
 
 }

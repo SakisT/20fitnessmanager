@@ -1,1 +1,29 @@
-<p>head-companies-relations works!</p>
+<div class="p-2">
+  <div class="flex flex-row justify-start -mx-2 divide-x divide-gray-300">
+    <div class="px-2 flex-1">
+      <ejs-grid [dataSource]='relationsSubject$ | async' [gridLines]="'Both'" [allowPaging]="true" [pageSettings]="{pageSize:10}"
+      [toolbar]="toolBarActions"
+      [editSettings]="{ allowEditing: true, allowAdding: true, allowDeleting: true,showDeleteConfirmDialog:true, mode: 'Normal' }"
+      (actionBegin)="actionBegin($event)" (actionComplete)="actionComplete($event)" [selectionSettings]="{mode:'Row',type:'Single'}">
+        <e-columns>
+        <e-column field="headChildCompanyRelationID" [isPrimaryKey]="true" [visible]="false"></e-column>
+        <e-column field="headCompanyID" [visible]="false"></e-column>
+
+        <e-column field="companyID" width="100"  headerText="Εταιρία - Κατάστημα" editType="dropdownedit" [valueAccessor]="companyFromID">
+          <ng-template #editTemplate let-data>
+            <ejs-dropdownlist [dataSource]='companies' [fields]="{text:'text',value:'value'}" [(value)]='relation.companyID'></ejs-dropdownlist>
+        </ng-template>
+        </e-column>
+
+        <e-column field="commission" width="40" headerText="Ποσοστό" [type]="'numeric'" textAlign="center" [format]="'N2'"></e-column>
+        <e-column field="remarks" width="200" headerText="Παρατηρήσεις" editType="stringedit"></e-column>
+        </e-columns>
+      </ejs-grid>
+    </div>
+    <div class="px-2">
+
+    </div>
+  </div>
+
+
+</div>

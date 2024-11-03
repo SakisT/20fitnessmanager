@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@syncfusion/ej2-angular-buttons": "^27.1.53",
+    "@syncfusion/ej2-angular-dropdowns": "^27.1.57",
     "@syncfusion/ej2-angular-grids": "^27.1.55",
     "@syncfusion/ej2-angular-inputs": "^27.1.55",
     "@syncfusion/ej2-angular-navigations": "^27.1.56",
