@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         {
           text: 'Home',
           iconCss: 'e-icons e-home',
-          url: '/'
+          url: '/headCompanies/dash'
         },
         {
           text: 'About',

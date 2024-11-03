@@ -1,13 +1,16 @@
 <div class="p-2">
   <div class="flex flex-row justify-start -mx-2 divide-x divide-gray-300">
-    <div class="px-2 w-216">
-      <ejs-grid [dataSource]='expenseTypes$ | async'>
+    <div class="px-2 flex-1">
+      <ejs-grid [dataSource]='expenseTypes$ | async'
+      [toolbar]="['Add','Edit','Update','Delete','Cancel','Search']"
+      [editSettings]="{ allowEditing: true, allowAdding: true, allowDeleting: true,showDeleteConfirmDialog:true, mode: 'Normal' }"
+      (actionBegin)="actionBegin($event)" (actionComplete)="actionComplete($event)" [selectionSettings]="{mode:'Row',type:'Single'}">
         <e-columns>
           <e-column field="headExpenseTypeID" [isPrimaryKey]="true" [visible]="false"></e-column>
           <e-column field="headCompanyID" [visible]="false"></e-column>
-          <e-column width="40" field="isActive" headerText="Ενεργό" [type]="'checkbox'"></e-column>
-          <e-column width="100" field="name"></e-column>
-          <e-column width="200" field="description"></e-column>
+          <e-column width="40" field="isActive" headerText="Ενεργό"  [displayAsCheckBox]="true" editType="booleanedit"></e-column>
+          <e-column width="200" field="name" editType="stringedit"></e-column>
+          <e-column width="400" field="description"  editType="stringedit"></e-column>
         </e-columns>
       </ejs-grid>
     </div>

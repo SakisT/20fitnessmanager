@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginSuccess() {
-    if (this.auth.IsInRole(Role.Administrator.toString())) {
+    if (this.auth.IsInRole([Role.Administrator])) {
       this.router.navigate(['/headCompanies/dash']);
     }
   }

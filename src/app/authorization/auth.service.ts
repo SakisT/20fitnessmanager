@@ -50,8 +50,11 @@ export class AuthService {
     return this.currentUserSubject.asObservable();
   }
 
-  public IsInRole(role: string | Role): boolean {
-    return this.currentUser?.roles?.includes(role);
+  public IsInRole(roles: string[] | Role[]): boolean {
+    if(!this.currentUser) {
+      this.currentUser = this.getUser();
+    }
+    return roles.some(role=>this.currentUser?.roles?.includes(role)) ;
   }
 
   public HasClaim(claimType: string, claimValue: string): boolean {

@@ -22,12 +22,12 @@ export class HeadCompaniesService {
     return this.http.get<any>(`${environment.apiURL}headExpenseTypes/list/${headID}`);
   }
 
-  public addHeadExpenseType(headID: string, expenseType: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiURL}headExpenseTypes/${headID}`, expenseType);
+  public addHeadExpenseType(expenseType: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiURL}headExpenseTypes`, expenseType);
   }
 
-  public deleteHeadExpenseType(headID: string, expenseTypeID: string): Observable<any> {
-    return this.http.delete<any>(`${environment.apiURL}headExpenseTypes/${headID}/${expenseTypeID}`);
+  public deleteHeadExpenseType(expenseTypeID: string): Observable<any> {
+    return this.http.delete<any>(`${environment.apiURL}headExpenseTypes/${expenseTypeID}`);
   }
 
   public updateHeadExpenseType(headID: string, expenseType: any): Observable<any> {
