@@ -1,12 +1,91 @@
-<ejs-grid [dataSource]='' height='267px'>
-  <e-columns>
-    <e-column field='id' headerText='ID' textAlign='Right' width=90></e-column>
-    <e-column field='date' headerText='Ημερομηνία' format='yMd' textAlign='Right' width=90></e-column>
-    <e-column field='description' headerText='Περιγραφή' width=90></e-column>
-    <e-column field='amount' headerText='Ποσό' textAlign='Right' width=90></e-column>
-    <e-column field='type' headerText='Τύπος' width=90></e-column>
-    <e-column field='category' headerText='Κατηγορία' width=90></e-column>
-    <e-column field='company' headerText='Εταιρεία' width=90></e-column>
-    <e-column field='user' headerText='Χρήστης' width=90></e-column>
-  </e-columns>
-</ejs-grid>
+<div class="p-2">
+  <div class="flex flex-row justify-start -mx-2 w-full">
+    <div class="px-2 flex-1">
+      <ejs-grid [dataSource]='' width="100%">
+        <e-columns></e-columns>
+      </ejs-grid>
+    </div>
+
+    <div class="px-2 w-120">
+      <div class="flex flex-row justify-start -mx-2">
+        <div class="px-2 w-1/2">
+          <button ejs-button class="e-primary" (click)="initNewIncome()">Νέο έσοδο</button>
+        </div>
+        <div class="px-2 w-1/2">
+          <button ejs-button class="e-primary" (click)="initNewExpense()">Νέο έξοδο</button>
+        </div>
+      </div>
+
+      <div *ngIf="incomeForm.get('headIncomeID')?.value" class="text-gray-600 bg-green-50 border border-green-100 rounded shadow p-2 m-2">
+        <form [formGroup]="incomeForm">
+          <input formControlName="headIncomeID" type="hidden">
+          <input formControlName="headCompanyID" type="hidden">
+          <input formControlName="companyID" type="hidden">
+          <input formControlName="userID" type="hidden">
+          <input formControlName="timestamp" type="hidden">
+
+          <div class="flex flex-row justify-start -mx-2 mt-8">
+            <div class="px-2 w-48">Εταιρία/Κατάστημα</div>
+            <div class="px-2 flex-1">
+              <ejs-dropdownlist formControlName="companyID" [dataSource]="relations"
+                [fields]="{text:'companyName',value:'companyID'}"
+                [placeholder]="'Επιλέξτε εταιρία/κατάστημα'"></ejs-dropdownlist>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-start -mx-2">
+            <div class="px-2 w-48">Ημερομηνία</div>
+            <div class="px-2 w-32">
+              <ejs-datepicker formControlName="incomeDate" [format]="'d/M/yyy'"></ejs-datepicker>
+            </div>
+          </div>
+
+
+          <div class="flex flex-row justify-start -mx-2">
+            <div class="px-2 w-48">Ποσό</div>
+            <div class="px-2 w-20">
+              <ejs-numerictextbox class="text-right" [format]="'N2'" [showClearButton]="false" [showSpinButton]="false"
+                formControlName="amount"></ejs-numerictextbox>
+            </div>
+            <div class="px-2 flex-1 text-xs italic">
+              <span [innerHTML]="analysis | safeHtml"></span>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-start -mx-2">
+            <div class="px-2 flex-1">
+
+              <ejs-textbox formControlName="remarks" [multiline]="true" rows="4"  placeholder="Παρατηρήσεις"
+                 floatLabelType="Auto"></ejs-textbox>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-start -mx-2">
+            <div class="px-2 w-1/2">
+              <button ejs-button class="e-success" (click)="saveIncome()">Αποθήκευση</button>
+            </div>
+            <div class="px-2 w-1/2">
+              <button ejs-button class="e-primary" (click)="cancelIncome()">Ακύρωση</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div *ngIf="expenseForm.get('headExpenseID')?.value"  class="bg-red-50 border border-red-100 rounded shadow p-2 m-2">
+        <form [formGroup]="expenseForm">
+          <input formControlName="headExpenseID" type="hidden">
+          <input formControlName="headExpenseTypeID" type="hidden">
+          <input formControlName="userID" type="hidden">
+          <input formControlName="timestamp" type="hidden">
+
+          <div class="flex flex-row justify-start -mx-2">
+
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

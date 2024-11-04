@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild, Inject, inject } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { TextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 import { AppService } from './app.service';
@@ -12,7 +12,7 @@ import { IUser } from './models/user';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, TextBoxModule, DialogModule, LoginComponent, MenuModule],
+  imports: [RouterOutlet, CommonModule, TextBoxModule, DialogModule, LoginComponent, MenuModule, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -53,18 +53,20 @@ export class AppComponent implements OnInit, AfterViewInit {
           iconCss: 'e-icons e-home',
           url: '/headCompanies/dash'
         },
-        {
-          text: 'About',
-          iconCss: 'e-icons e-info'
-        },
-        {
-          text: 'Contact',
-          iconCss: 'e-icons e-contact'
-        },
+        // {
+        //   text: 'About',
+        //   iconCss: 'e-icons e-info',
+        //   url: '#'
+        // },
+        // {
+        //   text: 'Contact',
+        //   iconCss: 'e-icons e-contact',
+        //   url: '#'
+        // },
         {
           text: 'Logout',
-          id: 'logout',
           iconCss: 'e-icons e-logout',
+          url: 'logout'
         }
       ];
     } else {
@@ -74,14 +76,14 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 
 
-  async onClick(args: any) {
-    if (args.item.id === 'logout') {
-      await this.logOut();
-    }
-    if (args.item.path) {
-      this.router.navigate([args.item.path]);
-    }
-  }
+  // async onClick(args: any) {
+  //   if (args.item.id === 'logout') {
+  //     await this.logOut();
+  //   }
+  //   if (args.item.path) {
+  //     this.router.navigate([args.item.path]);
+  //   }
+  // }
 
   async logOut() {
     try {

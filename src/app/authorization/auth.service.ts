@@ -50,6 +50,12 @@ export class AuthService {
     return this.currentUserSubject.asObservable();
   }
 
+  public logOut(): void {
+    sessionStorage.clear();
+    this.currentUser = null;
+    this.currentUserSubject.next(null);
+  }
+
   public IsInRole(roles: string[] | Role[]): boolean {
     if(!this.currentUser) {
       this.currentUser = this.getUser();

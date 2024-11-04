@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
+
 })
 export class HeadCompaniesService {
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
-   public getHeadCompany(headCompanyID: string): Observable<any> {
+  public getHeadCompany(headCompanyID: string): Observable<any> {
     return this.http.get<any>(`${environment.apiURL}headCompanies/${headCompanyID}`);
   }
 
@@ -51,7 +53,7 @@ export class HeadCompaniesService {
   }
 
   public getHeadRelations(headID: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiURL}headRelations/list/${headID}`);
+    return this.http.get<any>(`${environment.apiURL}headChildCompanyRelations/list/${headID}`);
   }
 
   public getHeadChildCompanyRelations(headID: string): Observable<any> {
@@ -68,6 +70,14 @@ export class HeadCompaniesService {
 
   public updateChildCompanyRelation(headID: string, relation: any): Observable<any> {
     return this.http.put<any>(`${environment.apiURL}headChildCompanyRelations/${headID}`, relation);
+  }
+
+  public getHeadIncomes(headID: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiURL}headIncomes/list/${headID}`);
+  }
+
+  public getSuggestIncome(headCompanyID: string, companyID: string, date: string | null): Observable<any> {
+    return this.http.get<any>(`${environment.apiURL}headIncomes/suggestIncome/${headCompanyID}/${companyID}/${date}`);
   }
 
 }

@@ -1,4 +1,4 @@
-<div class="flex h-screen bg-violet-200">
+<div class="flex h-screen">
   <!-- Left side -->
   <div class="w-64 h-full"> <!-- bg-violet-200 -->
     <!-- Content for the left side -->
@@ -9,8 +9,14 @@
     <!-- Top section of the right side -->
     <div class="h-auto"> <!-- bg-violet-300 -->
       <!-- Content for the top section -->
-       <div class="flex flex-row justify-center">
-        <ejs-menu [items]="menuItems"  (select)="onClick($event)"></ejs-menu>
+       <div class="flex flex-row justify-center -mx-0">
+        <!-- <ejs-menu [items]="menuItems"  (select)="onClick($event)"></ejs-menu> -->
+         <div class="px-0" *ngFor="let item of menuItems">
+          <a [routerLink]="[item.url]"
+          class="px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-800">
+          {{item.text}}
+        </a>
+         </div>
        </div>
     </div>
 
