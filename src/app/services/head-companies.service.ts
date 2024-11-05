@@ -40,8 +40,8 @@ export class HeadCompaniesService {
     return this.http.get<any>(`${environment.apiURL}headExpenses/list/${headID}`);
   }
 
-  public addHeadExpense(headID: string, expense: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiURL}headExpenses/${headID}`, expense);
+  public addHeadExpense( expense: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiURL}headExpenses`, expense);
   }
 
   public deleteHeadExpense(headID: string, expenseID: string): Observable<any> {
@@ -78,6 +78,14 @@ export class HeadCompaniesService {
 
   public getSuggestIncome(headCompanyID: string, companyID: string, date: string | null): Observable<any> {
     return this.http.get<any>(`${environment.apiURL}headIncomes/suggestIncome/${headCompanyID}/${companyID}/${date}`);
+  }
+
+  public saveHeadIncome(income: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiURL}headIncomes`, income);
+  }
+
+  public updateHeadIncome(income: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiURL}headIncomes/${income.headIncomeID}`, income);
   }
 
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EditService, GridModule, PageService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 import { HeadCompaniesService } from '../../../services/head-companies.service';
 import { AuthService } from '../../../authorization/auth.service';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { map, Observable, Subject } from 'rxjs';
@@ -38,7 +38,8 @@ import { SafeHtmlPipe } from '../../../pipes/safe-html.pipe';
     ToolbarService,
     EditService,
     PageService,
-    DatePipe]
+    DatePipe,
+    DecimalPipe]
 })
 export class RecordsListComponent {
   currentHeadCompany: any;
@@ -87,15 +88,15 @@ export class RecordsListComponent {
   toolBarActions: string[] = [];
 
   analysis = '';
-  constructor(private readonly fb: FormBuilder, private readonly service: HeadCompaniesService, private readonly auth: AuthService, private readonly dp: DatePipe) {
+  constructor(private readonly fb: FormBuilder, private readonly np: DecimalPipe, private readonly service: HeadCompaniesService, private readonly auth: AuthService, private readonly dp: DatePipe) {
 
     this.incomeForm = this.fb.group({
       headIncomeID: [null, Validators.required],
       headCompanyID: [null, Validators.required],
-      companyID: [null],
+      companyID: [null,Validators.required],
       amount: [0, Validators.required],
       incomeDate: [new Date(), Validators.required],
-      userID: [null],
+      userID: [Guid.EMPTY.toString()],
       remarks: [''],
       timestamp: [new Date()]
     });
@@ -105,7 +106,7 @@ export class RecordsListComponent {
       headExpenseTypeID: [null, Validators.required],
       amount: [0, Validators.required],
       expenseDate: [new Date(), Validators.required],
-      userID: [null],
+      userID: [Guid.EMPTY.toString()],
       remarks: [''],
       timestamp: [new Date()]
     });
@@ -118,9 +119,23 @@ export class RecordsListComponent {
       const dateString = this.dp.transform(dateForString, 'yyyy-MM-dd');
       this.service.getSuggestIncome(this.currentHeadCompany.headCompanyID, this.incomeForm.get('companyID')?.value, dateString).subscribe({
         next: (result: any) => {
-          this.analysis = `<div class="flex flex-row justify-start -mx-1">` +
+          this.analysis =
+            `<div class="flex flex-row justify-start -mx-1">` +
+            `<div class="w-20 px-1">Έσοδα</div>` +
+            `<div class="flex-1 px-1 text-right">${this.np.transform(result.totalAmount, '1.2-2')} €</div>` +
+            `</div>` +
+            `<div class="flex flex-row justify-start -mx-1">` +
+            `<div class="w-20 px-1">Προμήθεια %</div>` +
+            `<div class="flex-1 px-1 text-right">${result.commissionPercentage} %</div>` +
+            `</div>` +
+            `<div class="flex flex-row justify-start -mx-1">` +
+            `<div class="w-20 px-1">Προμήθεια €</div>` +
+            `<div class="flex-1 px-1 text-right">${this.np.transform(result.commission, '1.2-2')} %</div>` +
+            `</div>`;
 
-            `</div`;
+          this.incomeForm.patchValue({
+            amount: result.commission
+          });
         },
         error: (error: any) => {
           console.log(error);
@@ -258,22 +273,8 @@ export class RecordsListComponent {
     });
   }
 
-  initNewExpense(): void {
-    this.expenseState = 'add';
-    this.incomeForm.reset();
-    this.expenseForm.reset();
-    this.expenseForm.patchValue({
-      headExpenseID: Guid.create().toString(),
-      headExpenseTypeID: null,
-      amount: 0,
-      expenseDate: new Date(),
-      userID: null,
-      remarks: '',
-      timestamp: new Date()
-    });
-  }
-
   initNewIncome(): void {
+    this.analysis = '';
     this.incomeState = 'add';
     this.expenseForm.reset();
     this.incomeForm.reset();
@@ -283,28 +284,111 @@ export class RecordsListComponent {
       companyID: null,
       amount: 0,
       incomeDate: new Date(),
-      userID: null,
+      userID: Guid.EMPTY.toString(),
       remarks: '',
       timestamp: new Date()
     });
+
+  }
+
+  initNewExpense(): void {
+    this.analysis = '';
+    this.expenseState = 'add';
+    this.incomeForm.reset();
+    this.expenseForm.reset();
+    this.expenseForm.patchValue({
+      headExpenseID: Guid.create().toString(),
+      headExpenseTypeID: null,
+      amount: 0,
+      expenseDate: new Date(),
+      userID: Guid.EMPTY.toString(),
+      remarks: '',
+      timestamp: new Date()
+    });
+
+
   }
 
   saveIncome(): void {
-
+    this.analysis = '';
+    if (this.incomeState === 'add') {
+      this.service.saveHeadIncome(this.incomeForm.value).subscribe({
+        next: (result: any) => {
+          this.incomes.push(result);
+          this.incomeForm.reset();
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      });
+    } else {
+      this.service.updateHeadIncome(this.incomeForm.value).subscribe({
+        next: (result: any) => {
+          this.incomes = this.incomes.map((income: any) => {
+            if (income.headIncomeID === result.headIncomeID) {
+              return result;
+            }
+            return income;
+          });
+          this.incomeForm.reset();
+          this.incomeState = 'add';
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      });
+    }
   }
 
   cancelIncome(): void {
+    this.analysis = '';
+  }
 
+  saveExpense(): void {
+    this.analysis = '';
+    if (this.expenseState === 'add') {
+      this.service.addHeadExpense(this.expenseForm.value).subscribe({
+        next: (result: any) => {
+          this.expenses.push(result);
+          this.expenseForm.reset();
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      });
+    } else {
+      this.service.updateHeadExpense(this.currentHeadCompany.headCompanyID, this.expenseForm.value).subscribe({
+        next: (result: any) => {
+          this.expenses = this.expenses.map((expense: any) => {
+            if (expense.headExpenseID === result.headExpenseID) {
+              return result;
+            }
+            return expense;
+          });
+          this.expenseForm.reset();
+          this.expenseState = 'add';
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      });
+    }
+  }
+
+  cancelExpense(): void {
+    this.analysis = '';
   }
 
 
   editExpense(expense: any): void {
+    this.analysis = '';
     this.expenseState = 'edit';
     this.expenseForm.patchValue(expense);
     this.expenseForm.markAsPristine();
   }
 
   editIncome(income: any): void {
+    this.analysis = '';
     this.incomeState = 'edit';
     this.incomeForm.patchValue(income);
     this.incomeForm.markAsPristine();
